@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Boogaloo|Yellowtail" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/styles.css">
+    <link rel="stylesheet" href="./assets/css/guistyles.css">
+    <title>Summit Broomball</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Header -->
+        
+        <div class="row"> <!-- Positioning the logo via bootstrap grid properties -->
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col">
+                    <img src="./images/logo.jpg" id="site-logo" alt="logo">
+            </div>
+            <div class="col"></div>
+        </div>
+        
+        <!-- Sidebar -->
+        <nav id="sidebar" class="active mobile">
+            <div id="dismiss">
+                <i class="glyphicon glyphicon-arrow-left"></i>
+            </div>
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+            </div>
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="/index">HOME</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
+                    <ul>
+                        <li>
+                            <a href="/player">Add a player</a>
+                        </li>
+                        <li>
+                            <a href="#">Draft teams</a>
+                        </li>
+                        <li>
+                            <a href="/league">League info</a>
+                        </li>
+                        <li>
+                            <a href="/stats">Enter game stats</a>
+                        </li>
+                    </ul>
+                    <li>
+                        <a href="/contact">Contact</a>
+                    </li>
+                </li>
+            </ul>                    
+        </nav>
+
+        <!-- Page Content -->
+        <div class="row">
+            <div class="col-md-2">
+            <!-- empty col for centering main content -->
+            </div>
+            <div class="col-md-8" id="content">
+                <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                    <i class="glyphicon glyphicon-align-left">
+
+                    </i>
+                    Menu
+                </button>
+
+                <div class="main">
+                    <h2 class="draft_page">Summit Broomball</h2>
+                    <div class="row">
+
+                        <div id="schedule_game" class="col">
+                            <div>
+                                <p><br>Create a new game</p>
+                            </div>
+                            <form method="post" class="col">
+                                <div class="form-group"> <!-- Date input -->
+                                    <label class="control-label" id="date_text" for="date">Date</label>
+                                    <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+                                </div>
+                                <div class="form-group "> <!-- Submit button -->
+                                    <button class="btn btn-primary regular_grey" name="submit" type="submit">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="existing_game" class="col">
+                            <p id="game_text"><br>Upcoming games</p>
+                            <div id="game_list">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col text-center"> <!-- Submit button -->
+                                <button class="btn btn-primary regular_grey mobile-button" name="submit" type="submit" id="games_to_show" which-list="past">Past Games</button>
+                            </div>
+    
+                        </div>
+
+                    </div>
+                </div> <!-- End of main -->
+                <br>
+                <div class="main content_hidden">
+                <!-- <div class="main"> -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col text-center">
+                                <button class="btn btn-info navbar-btn light_grey menu_options" id="unavailable">Show unavailable</button> 
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-info navbar-btn light_grey menu_options" id="ten_buckers">Add Non-Members</button> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="main content_hidden" id="draft_data"> <span id="js_content"></span>
+                    <div class="container">
+                        <div class="row" id="list_with_players">
+                            <div class="col"><h2 id="col1_title"></h2><span id="dark_draft_col"></span></div>
+                            <div class="col"> <h2><br></h2> <span id="available_draft_col"></span></div>
+                            <div class="col mobile-heading"><h2 id="col2_title"></h2><span id="white_draft_col"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- no longer js generated -->
+                <div class="container button-container-one" id="setting_the_picks"> 
+                    <div class="row"> 
+                        <div class="col draft_list" id="list_of_players">
+
+                        </div> 
+                        <div class="col draft_list" id="ranks">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end of section no longer js generated -->
+                <br>
+                <div class="main content_hidden">
+                <!-- <div class="main"> -->
+                    <div class="container button-container">
+                        <div class="row">
+                            <div class="col text-center">
+                                <button class="btn btn-info navbar-btn regular_grey computer_draft menu_options" id="picks_dark">Set Dark Picks</button> 
+                            </div>
+                            <div class="col text-center">
+                                
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-info navbar-btn light_grey menu_options" id="reset">Reset</button> 
+                            </div>
+                            <div class="col text-center">
+                                
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-info navbar-btn regular_grey computer_draft menu_options" id="picks_white">Set White Picks</button> 
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            
+                            <div class="col text-center">
+                                <button class="btn btn-info navbar-btn dark_grey menu_options" id="manual_draft">Manual Draft</button> 
+                            </div>
+                            <div class="col text-center">
+                                
+                            </div>
+                            <div class="col text-center">
+                                
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-info navbar-btn dark_grey menu_options" id="draftingFeature">Computer Draft</button> 
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row" id="row_of_features">
+                            <div class="col text-center">
+                            
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-info navbar-btn dark_grey js_draft menu_options" id="autodraft">Autodraft</button> 
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-info navbar-btn dark_grey js_draft menu_options" id="alternate_draft">Alternate Draft</button> 
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-info navbar-btn dark_grey js_draft menu_options" id="serpentine_draft">Serpentine Draft</button> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <!-- <div id="draft_data">  -->
+                <div class="content_hidden">
+                    <div class="container">
+                        <div class="row">
+                                <div class="col"></div>
+                                <div class="col">
+                                    <div class="col text-center" id="bottom_lock_feature">
+                                        <button class="btn btn-info navbar-btn regular_grey menu_options" class="locking_feature" id="unlock_all_info"><i class="fa fa-unlock-alt bigger_fa_lock"></i></button> 
+                                        <button class="btn btn-info navbar-btn dark_grey menu_options" class="locking_feature" id="lock_all_info"><i class="fa fa-lock bigger_fa_lock"></i></button> 
+                                    </div>
+                                </div>
+                                <div class="col"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div> <!-- End of content -->
+        </div>
+    </div> <!-- End of wrapper -->
+    <div class="overlay"> </div>
+            
+    <footer>
+
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="./assets/js/navigation.js"></script>
+    <script src="./assets/js/draft.js"></script>
+    <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
+    <script src="./assets/js/app.js"></script>
+    <script>
+        // code to add the datepicker
+        var date_input=$('input[name="date"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        var options= {
+            format: 'mm/dd/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+            };
+        date_input.datepicker(options);
+    </script>
+   
+</html>

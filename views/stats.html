@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Boogaloo|Yellowtail" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <link rel="stylesheet" href="./assets/css/guistyles.css">
+    <title>Summit Broomball</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!-- <div class="modal-body">
+                        <section class="chart-container">
+                            <svg width="460" height="320"></svg>
+                        </section>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Header -->
+
+        <div class="row">
+            <!-- Positioning the logo via bootstrap grid properties -->
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col">
+                <img src="./images/logo.jpg" id="site-logo" alt="logo">
+            </div>
+            <div class="col"></div>
+        </div>
+
+    <!-- Sidebar -->
+    <nav id="sidebar" class="active mobile">
+        <div id="dismiss">
+            <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="#">About</a>
+            </li>
+            <li>
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
+                <ul>
+                    <li>
+                        <a href="/player">Add a player</a>
+                    </li>
+                    <li>
+                        <a href="/draft">Draft teams</a>
+                    </li>
+                    <li>
+                        <a href="/league">League info</a>
+                    </li>
+                    <li>
+                        <a href="#">Enter game stats</a>
+                    </li>
+                </ul>
+                <li>
+                    <a href="/contact">Contact</a>
+                </li>
+            </li>
+        </ul>
+    </nav>
+
+                    <!-- Page Content -->
+    <div class="row">
+        <div class="col-md-2">
+            
+        </div>
+        <div class="col-md-8" id="content">
+            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                <i class="far fa-arrow-alt-circle-left"></i>
+                Menu
+            </button>   
+        </div>
+    </div>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Enter stats</h2>
+                <div class="main">
+    
+                    <div class="row" id="list_of_games">
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>    
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="container">
+        <!-- <div class="main" id="game_records"> -->
+        <div class="main statscontent_hidden" id="game_records">
+            <div class="container">
+                <div class="row">
+                    <div class="col"><span id="results_dark"></span></div>
+                    <div class="col"><span id="results_white"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="statscontent_hidden">
+        <div class="container">
+            <div class="row">
+                    <div class="col"></div>
+                    <div class="col">
+                        <div class="col text-center" id="bottom_lock_feature">
+                            <button class="btn btn-info navbar-btn regular_grey menu_options" id="unlock_all_info_stats"><i class="fa fa-unlock-alt bigger_fa_lock"></i></button> 
+                            <button class="btn btn-info navbar-btn dark_grey menu_options" id="lock_all_info_stats"><i class="fa fa-lock bigger_fa_lock"></i></button> 
+                        </div>
+                    </div>
+                    <div class="col"></div>
+            </div>
+        </div>
+    </div>
+    <footer>
+
+    </footer>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="./assets/js/navigation.js"></script>
+    <script src="./assets/js/recapButtons.js"></script>
+    <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/stats.js"></script>
+    <!-- <script src="https://d3js.org/d3.v5.min.js/"> </script> -->
+   <!-- <script  src="./d3vis/teamStats.js"> </script>  -->
+
+</body>
+</html>
