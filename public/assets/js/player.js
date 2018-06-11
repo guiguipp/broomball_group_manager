@@ -1,6 +1,14 @@
 $(document).ready(function() {
-
-      // Getting references to the name input and player container, as well as the table body
+    // Hide the players until necessary
+    $("#table_striped").hide()
+    $("#edit_player").click(function(){
+        $("#table_striped").show()
+        })
+    $("#input_form").hide()
+    $("#add_player").click(function(){
+        $("#input_form").show()
+        })
+    // Getting references to the name input and player container, as well as the table body
     var shortNameInput = $("#ShortName");
     var fullNameInput = $("#FullName");
     var playerLevelInput = $("#LevelSelect");
@@ -11,15 +19,19 @@ $(document).ready(function() {
     var playerList = $("tbody");
     var playerContainer = $(".player-container");
 
-        // Adding event listeners to the form to create a new object, and the button to delete a Player
+    // Adding event listeners to the form to create a new object, and the button to delete a Player
     // $(document).on("submit", "#player-form", handlePlayerFormSubmit);
     $(document).on("submit", "#player-form", handlePlayerFormSubmit);
     $(document).on("click", ".delete-player", handleDeleteButtonPress);
+    $("#cancel_form").click(function(){
+        console.log("Guigui was here")
+        removeInfo()
+        });
 
     // Getting the initial list of Players
     getPlayers();
 
-        // A function to handle what happens when the form is submitted to create a new Player
+    // A function to handle what happens when the form is submitted to create a new Player
     function handlePlayerFormSubmit(event) {
         event.preventDefault();
         console.log(shortNameInput);
@@ -41,8 +53,19 @@ $(document).ready(function() {
         email: emailInput .val() .trim()
         });
     }
+    function removeInfo() {
+        event.preventDefault();
+        console.log("Overwrite. Please wait...");
+        // Overwrite all input
+        $("#short_name").val("")
+        $("#full_name").val("")
+        $("#level_select").val("")
+        $("#position_select").val("")
+        $("#player_status").val("")
+        $("#email_address").val("")
+    }
 
-    // A function for creating an player. Calls getPlayers upon completion
+    // A function for creating a player. Calls getPlayers upon completion
     function upsertPlayer(playerData) {
         $.post("/api/players", playerData)
         .then(getPlayers);
@@ -54,10 +77,10 @@ $(document).ready(function() {
         newTr.data("player", playerData);
         newTr.append("<td>" + playerData.shortname + "</td>");
         newTr.append("<td>" + playerData.full_name + "</td>");
-        newTr.append("<td>" + playerData.player_level + "</td>");
+        // newTr.append("<td>" + playerData.player_level + "</td>");
         newTr.append("<td>" + playerData.preferred_position + "</td>");
-        newTr.append("<td>" + playerData.player_status + "</td>");
-        newTr.append("<td>" + playerData.email + "</td>");        
+        // newTr.append("<td>" + playerData.player_status + "</td>");
+        // newTr.append("<td>" + playerData.email + "</td>");        
         newTr.append("<td><a style='cursor:pointer;color:red' class='delete-player'>Delete player</a></td>");
         return newTr;
     }
@@ -70,7 +93,7 @@ $(document).ready(function() {
             rowsToAdd.push(createPlayerRow(data[i]));
         }
         renderPlayerList(rowsToAdd);
-        nameInput.val("");
+        shortNameInput.val("");
         });
     }
 
@@ -79,13 +102,13 @@ $(document).ready(function() {
         playerList.children().not(":last").remove();
         playerContainer.children(".alert").remove();
         if (rows.length) {
-          console.log(rows);
-          playerList.prepend(rows);
-        }
+            // console.log(rows);
+            playerList.prepend(rows);
+            }
         else {
-          renderEmpty();
+            renderEmpty();
+            }
         }
-    }
 
         // Function for handling what happens when the delete button is pressed
     function handleDeleteButtonPress() {
