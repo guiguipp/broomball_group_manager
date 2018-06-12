@@ -409,50 +409,12 @@ $(document).ready(function() {
         console.log("team2Array: ", team2Array)
         })
 
-    $("#draftingFeature").click(function(){
+    $("#serpentine_draft").click(function() {
         let gameId = $(this).attr("game_id");
         let gameDate = $(this).attr("game_date");
         let locked = $(this).attr("locked");
-        let team1Name = "dark";
-        let team2Name = "white";
-        let darkObject = {
-            name: team1Name,
-            picks: team1Array
-            }
-        let whiteObject = {
-            name: team2Name,
-            picks: team2Array
-            }
-        // launch only if teams have not been reset
-        if (team1Array.length === 0 || team2Array.length === 0) {
-            console.log("Either array is empty, send error message")
-        }
-        else {
-            /*
-            console.log("will push the availabilities")
-            quickAvailabilities(gameId) */
-            // console.log("Checking format of objects in availabilities ", arrayOfAvailablePlayers[0])
-            $("#serpentine_draft").click(function() {
-                console.log("click recorded")
-                let gameId = $(this).attr("game_id");
-                let gameDate = $(this).attr("game_date");
-                let locked = $(this).attr("locked");
-                let team1Name = "dark";
-                let team2Name = "white";
-                if (locked === "false") {
-                    $.when($.ajax(serpentineDraft(darkObject,whiteObject,arrayOfAvailablePlayers))).then(function() {
-                        //this function is executed after function1
-                        getAvailablePlayers(gameId,gameDate,locked)
-                        })
-                    }
-                });
-                
-            }
-        });   
-        
-        $("#alternate_draft").click(function() {
-            console.log("click recorded")
-            console.log("Team1Array",team1Array)
+        let ready = $(this).attr("ready");
+        if (ready === "yes") {
             let darkObject = {
                 name: "dark",
                 picks: team1Array
@@ -461,19 +423,54 @@ $(document).ready(function() {
                 name: "white",
                 picks: team2Array
                 }
-            let gameId = $(this).attr("game_id");
-            let gameDate = $(this).attr("game_date");
-            let locked = $(this).attr("locked");
-            let team1Name = "dark";
-            let team2Name = "white";
+            console.log("darkObject: ",darkObject)            
+            if (locked === "false") {
+                $.when($.ajax(serpentineDraft(darkObject,whiteObject,arrayOfAvailablePlayers))).then(function() {
+                    //this function is executed after function1
+                    getAvailablePlayers(gameId,gameDate,locked)
+                    })
+                }
+            else {
+                console.log("Displayer error message: game locked")
+                }
+            }
+        else {
+            console.log("Display error message")
+            }
+        });
+
+    $("#alternate_draft").click(function() {
+        let gameId = $(this).attr("game_id");
+        let gameDate = $(this).attr("game_date");
+        let locked = $(this).attr("locked");
+        let ready = $(this).attr("ready");
+        if (ready === "yes") {
+            let darkObject = {
+                name: "dark",
+                picks: team1Array
+                }
+            let whiteObject = {
+                name: "white",
+                picks: team2Array
+                }
+            
             console.log("locked needs to be false: ", locked)
+            console.log("darkObject: ",darkObject)
             if (locked === "false") {
                 $.when($.ajax(alternateDraft(darkObject,whiteObject,arrayOfAvailablePlayers))).then(function() {
                     //this function is executed after function1
                     getAvailablePlayers(gameId,gameDate,locked)
                     })
                 }
-            })
+            else {
+                console.log("Displayer error message: game locked")
+                }
+            }
+        else {
+            console.log("Display error message")
+            }
+        });
+    
 
 
 ////////////////////////////////////////
@@ -744,7 +741,9 @@ $(document).ready(function() {
                 });
             
             if (team1Array.length === team2Array.length && team1Array.length === ultimateLength) {
-                console.log("Computer ready, enable button") 
+                console.log("Computer ready, enable button")
+                $("#alternate_draft").attr("ready","yes")
+                $("#serpentine_draft").attr("ready","yes") 
                 }
             })
         }
@@ -802,6 +801,8 @@ const testPicksReadiness = (data) => {
         }
         else {
             console.log("The picks aren't ready yet")
+            $("#alternate_draft").attr("ready","no")
+            $("#serpentine_draft").attr("ready","no")
         }
     })
     pushPicksToArray(data)
