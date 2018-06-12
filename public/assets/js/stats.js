@@ -10,12 +10,12 @@ $(document).ready(function() {
     // shows the list of past games (had to be specific to that page because of the toggle on the draft page)
     function seeOnlyPastGames() {
         // emptying the div so that it does not keep appending when the data is refreshed
-        $("#list_of_games").text("");
+        $("#game_list").text("");
         $.ajax({ url: currentURL + "/api/games/past", method: "GET" }).then(function(dataFromAPI) {
             dataFromAPI.forEach((e) => {
                 let gameButton = `<div game_id=${e.id} class="game_results" locked="${e.lock_info}" game_date="${e.game_date}"> <button class="btn btn-info navbar-btn regular-grey game_button">${e.game_date}</button>\n`
                 let gameDiv = `${gameButton}`
-                $("#list_of_games").append(gameDiv);
+                $("#game_list").append(gameDiv);
                 });
             })
         }

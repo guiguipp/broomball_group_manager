@@ -446,25 +446,34 @@ $(document).ready(function() {
                         })
                     }
                 });
-            $("#alternate_draft").click(function() {
-                console.log("click recorded")
-                let gameId = $(this).attr("game_id");
-                let gameDate = $(this).attr("game_date");
-                let locked = $(this).attr("locked");
-                let team1Name = "dark";
-                let team2Name = "white";
-                console.log("locked needs to be false: ", locked)
-                if (locked === "false") {
-                    $.when($.ajax(alternateDraft(darkObject,whiteObject,arrayOfAvailablePlayers))).then(function() {
-                        //this function is executed after function1
-                        getAvailablePlayers(gameId,gameDate,locked)
-                        })
-                    }
-                })
-
-
+                
             }
         });   
+        
+        $("#alternate_draft").click(function() {
+            console.log("click recorded")
+            console.log("Team1Array",team1Array)
+            let darkObject = {
+                name: "dark",
+                picks: team1Array
+                }
+            let whiteObject = {
+                name: "white",
+                picks: team2Array
+                }
+            let gameId = $(this).attr("game_id");
+            let gameDate = $(this).attr("game_date");
+            let locked = $(this).attr("locked");
+            let team1Name = "dark";
+            let team2Name = "white";
+            console.log("locked needs to be false: ", locked)
+            if (locked === "false") {
+                $.when($.ajax(alternateDraft(darkObject,whiteObject,arrayOfAvailablePlayers))).then(function() {
+                    //this function is executed after function1
+                    getAvailablePlayers(gameId,gameDate,locked)
+                    })
+                }
+            })
 
 
 ////////////////////////////////////////
@@ -537,6 +546,8 @@ $(document).ready(function() {
     // shows players in their respective columns, according to the team they have been drafted to
     function getAvailablePlayers(idOfGame,dateOfGame,lockStatus) {
         $.ajax({ url: currentURL + "/api/rosters/game/" + idOfGame + "/availability/1/player/ASC", method: "GET" }).then(function(dataFromAPI) {
+            // console.log(dataFromAPI)
+            testPicksReadiness(dataFromAPI)
             $("#available_draft_col").text("")
             $("#dark_draft_col").text("")
             $("#white_draft_col").text("")
@@ -780,7 +791,57 @@ $(document).ready(function() {
 showTeams()
 seeUpcomingGames()
 
+// Function to check if the picks have been set by the captains
+// if so, creates a data attribute that will allow to launch the draft functions
+const testPicksReadiness = (data) => {
+    data.forEach((e) => {
+        if (e.captain1Pick != 0 && e.captain2Pick != 0) {
+            console.log("The picks are ready, set up the buttons and launch mapping function!")
+            $("#alternate_draft").attr("ready","yes")
+            $("#serpentine_draft").attr("ready","yes")
+        }
+        else {
+            console.log("The picks aren't ready yet")
+        }
+    })
+    pushPicksToArray(data)
+}
+const pushPicksToArray = (data) => {
+    // sorting all players via their ranking from the respective captains
+    let sortedDarkPicks = data.sort(function(a,b) {    
+    return a.captain1Pick > b.captain1Pick ? 1 : -1;
+    })
+    let sortedWhitePicks = data.sort(function(a,b) {    
+        return a.captain1Pick > b.captain1Pick ? 1 : -1;
+        })
+    // the sorting allows to push the players in the global arrays in the (respective) correct order
+    // we do so via an object constructor (that only push the data we want + deals with asynchronicity)
     
+    function darkPlayer(id,shortname,captain1Pick,captain2Pick) {
+        this.id = id,
+        this.shortname = shortname,
+        this.captain1Pick = captain1Pick,
+        this.captain2Pick = captain2Pick,
+        team1Array.push(this)
+        }
+    function whitePlayer(id,shortname,captain1Pick,captain2Pick) {
+        this.id = id,
+        this.shortname = shortname,
+        this.captain1Pick = captain1Pick,
+        this.captain2Pick = captain2Pick,
+        team2Array.push(this)
+        }
+    
+    sortedDarkPicks.forEach((e) => {
+        let darkPlayerToPush = new darkPlayer (e.id, e.player,e.captain1Pick, e.captain2Pick)
+        let whitePlayerToPush = new whitePlayer (e.id, e.player,e.captain1Pick, e.captain2Pick)
+    })
+
+    // console.log(sortedDarkPicks)
+
+}    
+
+
             
 /////////////////////////////////
 /// Machine Drafting functions //

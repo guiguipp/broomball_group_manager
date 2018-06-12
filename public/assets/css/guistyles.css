@@ -43,11 +43,15 @@ tr {
 /* lists in draft.html & stats.html */
 #list_of_games {
     max-height: 200px;
-    overflow: scroll;
+    padding-bottom: 50px;
+    overflow-x: unset;
+    overflow-y: scroll;
 }
 #game_list {
     max-height: 200px;
-    overflow: scroll;
+    padding-bottom: 50px;
+    overflow-x: unset;
+    overflow-y: scroll;
 }
 
 #bottom_lock_feature {
