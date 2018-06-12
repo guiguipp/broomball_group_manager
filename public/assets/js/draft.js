@@ -431,7 +431,7 @@ $(document).ready(function() {
                     })
                 }
             else {
-                console.log("Displayer error message: game locked")
+                console.log("Display error message: game locked")
                 }
             }
         else {
@@ -463,7 +463,7 @@ $(document).ready(function() {
                     })
                 }
             else {
-                console.log("Displayer error message: game locked")
+                console.log("Display error message: game locked")
                 }
             }
         else {
@@ -545,10 +545,10 @@ $(document).ready(function() {
         $.ajax({ url: currentURL + "/api/rosters/game/" + idOfGame + "/availability/1/player/ASC", method: "GET" }).then(function(dataFromAPI) {
             // console.log(dataFromAPI)
             testPicksReadiness(dataFromAPI)
-            $("#available_draft_col").text("")
-            $("#dark_draft_col").text("")
-            $("#white_draft_col").text("")
-            $("#js_content").text("")
+            $("#available_draft_col").empty()
+            $("#dark_draft_col").empty()
+            $("#white_draft_col").empty()
+            $("#js_content").empty()
             $("#col1_title").text("Dark Team")
             $("#col2_title").text("White Team")
             if (lockStatus === "true") {

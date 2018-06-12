@@ -227,6 +227,7 @@ https://material.io/tools/color/#!/?view.left=0&view.right=1&primary.color=FB8C0
 .roster_check {
     text-align: center;
     padding-left: 2%;
+    padding-right: 11%;
 }
 /* Slipping one team under the other on smaller screens */
 @media (max-width: 1199px) {
