@@ -247,7 +247,9 @@ thead > th {
     font-variant: small-caps;
     font-weight: bold;
 }
-
+.player_table {
+    padding-left: 19%;
+}  
 /* ---------------------------------D3 styling ----------------------------------------------- */
 
 @import 'https://fonts.googleapis.com/css?family=Paytone+One';
@@ -286,46 +288,6 @@ svg text{
   border: 2px solid #444;
   transition: all 160ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
-
-/* ---------------------------------D3 styling ----------------------------------------------- */
-
-@import 'https://fonts.googleapis.com/css?family=Paytone+One';
-
-.chart-container{
-  position: relative;
-}
-
-svg{
-  box-shadow: 0px 20px 50px -18px #aaa;
-  border-radius: .123rem;
-}
-.bar {
-  fill: #1888d6;
-  transition: all 150ms ease;
-}
-
-.bar:hover {
-  fill: #09163d;
-}
-
-.axis--x path {
-  visibility: hidden;
-}
-
-svg text{
-  fill: black;
-}
-
-/* tip */
-.tip{
-  width: 3rem;
-  background-color: #eee;
-  text-align: center;
-    box-shadow: 0px 2px 10px -2px #aaa;
-  border: 2px solid #444;
-  transition: all 160ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
-}
-
 .tip::after{
     content: " ";
     position: absolute;
