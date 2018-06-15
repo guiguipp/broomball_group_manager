@@ -544,7 +544,7 @@ $(document).ready(function() {
     function getAvailablePlayers(idOfGame,dateOfGame,lockStatus) {
         $.ajax({ url: currentURL + "/api/rosters/game/" + idOfGame + "/availability/1/player/ASC", method: "GET" }).then(function(dataFromAPI) {
             // console.log(dataFromAPI)
-            testPicksReadiness(dataFromAPI)
+            
             $("#available_draft_col").empty()
             $("#dark_draft_col").empty()
             $("#white_draft_col").empty()
@@ -593,6 +593,7 @@ $(document).ready(function() {
                 })
             let gameDay = `<div class="game_day"><br> <h2>${dateOfGame}</h2>`
             $("#js_content").append(gameDay)
+            testPicksReadiness(dataFromAPI)
             })
         }
 
@@ -810,10 +811,10 @@ const testPicksReadiness = (data) => {
 const pushPicksToArray = (data) => {
     // sorting all players via their ranking from the respective captains
     let sortedDarkPicks = data.sort(function(a,b) {    
-    return a.captain1Pick > b.captain1Pick ? 1 : -1;
-    })
-    let sortedWhitePicks = data.sort(function(a,b) {    
         return a.captain1Pick > b.captain1Pick ? 1 : -1;
+        })
+    let sortedWhitePicks = data.sort(function(a,b) {    
+        return a.captain2Pick > b.captain2Pick ? 1 : -1;
         })
     // the sorting allows to push the players in the global arrays in the (respective) correct order
     // we do so via an object constructor (that only push the data we want + deals with asynchronicity)

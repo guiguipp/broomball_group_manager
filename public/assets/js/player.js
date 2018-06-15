@@ -8,16 +8,11 @@ $(document).ready(function() {
     $("#add_player").click(function(){
         $("#input_form").show()
         })
-    // Getting references to the name input and player container, as well as the table body
-    var shortNameInput = $("#ShortName");
-    var fullNameInput = $("#FullName");
-    var playerLevelInput = $("#LevelSelect");
-    var preferredPositionInput = $("#PositionSelect");
-    var playerStatusInput = $("#PlayerStatus");
-    var emailInput = $("#Email");
-
     var playerList = $("tbody");
     var playerContainer = $(".player-container");
+    var shortNameInput = $("#short_name");
+    var fullNameInput = $("#full_name");
+    var emailInput = $("#email_address");
 
     // Adding event listeners to the form to create a new object, and the button to delete a Player
     // $(document).on("submit", "#player-form", handlePlayerFormSubmit);
@@ -34,6 +29,16 @@ $(document).ready(function() {
     // A function to handle what happens when the form is submitted to create a new Player
     function handlePlayerFormSubmit(event) {
         event.preventDefault();
+        // Getting references to the name input and player container, as well as the table body
+        var playerLevelInput = $("#level_select");
+        var preferredPositionInput = $("#position_select");
+        var playerStatusInput = $("#player_status").val().trim();
+            console.log(playerStatusInput)
+            console.log(playerStatusInput)
+            if (playerStatusInput === "Ten Bucker") {playerStatusInput = "ten_bucker"}
+            if (playerStatusInput === "Member") {playerStatusInput = "member"}
+
+
         console.log(shortNameInput);
         // Don't do anything if the name fields hasn't been filled out
         if (
@@ -43,14 +48,15 @@ $(document).ready(function() {
         ) {
         return;
         }
+        console.log(playerStatusInput)
         // Calling the upsertPlayer function and passing in the value of the name input
         upsertPlayer({
-        shortname: shortNameInput .val() .trim(),
-        full_name: fullNameInput .val() .trim(),
-        player_level: playerLevelInput .val() .trim(),
-        preferred_position: preferredPositionInput .val() .trim(),
-        player_status: playerStatusInput .val() .trim(),
-        email: emailInput .val() .trim()
+            shortname: shortNameInput .val() .trim(),
+            full_name: fullNameInput .val() .trim(),
+            player_level: playerLevelInput .val() .trim(),
+            preferred_position: preferredPositionInput .val() .trim(),
+            player_status: playerStatusInput,
+            email: emailInput .val() .trim()
         });
     }
     function removeInfo() {
