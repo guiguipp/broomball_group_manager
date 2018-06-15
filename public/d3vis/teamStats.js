@@ -1,81 +1,89 @@
 const currentURL = window.location.origin;
+$(document).on("click", ".game_button", function (){
+  let gameId = $(this).attr("game_id");
+  let queryURL = currentURL + "/api/stats/" + gameId + "/goals"
+  d3.json(queryURL, function (data) {
+    console.log(queryURL)
+    console.log(data);
+  
+    var tip = d3.select(".chart-container")
+      .append("div")
+      .attr("class", "tip")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("visibility", "hidden");
 
-d3.json(currentURL + "/api/stats/goals", function (data) {
- console.log(data);
- 
-  var tip = d3.select(".chart-container")
-    .append("div")
-    .attr("class", "tip")
-    .style("position", "absolute")
-    .style("z-index", "10")
-    .style("visibility", "hidden");
+    var svg = d3.select("svg").attr("class", "background-style").attr("id","data_content"),
+      margin = {
+        top: 20,
+        right: 20,
+        bottom: 42,
+        left: 40
+      },
+      width = (+svg.attr("width") - margin.left - margin.right) * 90/100,
+      height = +svg.attr("height") - margin.top - margin.bottom;
 
-  var svg = d3.select("svg").attr("class", "background-style").attr("id","data_content"),
-    margin = {
-      top: 20,
-      right: 20,
-      bottom: 42,
-      left: 40
-    },
-    width = (+svg.attr("width") - margin.left - margin.right) * 90/100,
-    height = +svg.attr("height") - margin.top - margin.bottom;
+    var x = d3.scaleBand().rangeRound([0, width]).padding(0.05),
+      y = d3.scaleLinear().rangeRound([height, 0]);
 
-  var x = d3.scaleBand().rangeRound([0, width]).padding(0.05),
-    y = d3.scaleLinear().rangeRound([height, 0]);
+    var g = svg.append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  var g = svg.append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // var data = team_data;
 
-  // var data = team_data;
+    x.domain(data.map(function (d) {
+      return d.player;
+    }));
+    y.domain([0, d3.max(data, function (d) {
+      return d.goals;
+    })]);
 
-  x.domain(data.map(function (d) {
-    return d.player;
-  }));
-  y.domain([0, d3.max(data, function (d) {
-    return d.goals;
-  })]);
+    g.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))
+      .append("text")
+      .attr("y", 6)
+      .attr("dy", "2.5em")
+      .attr("dx", width / 2 - margin.left)
+      .attr("text-anchor", "start")
+      .text("Players");
 
-  g.append("g")
-    .attr("class", "axis axis--x")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x))
-    .append("text")
-    .attr("y", 6)
-    .attr("dy", "2.5em")
-    .attr("dx", width / 2 - margin.left)
-    .attr("text-anchor", "start")
-    .text("Players");
-
-  g.append("g")
-    .attr("class", "axis axis--y")
-    .call(d3.axisLeft(y).ticks(5))
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", "0.71em")
-    .attr("text-anchor", "end")
-    .text("goals Scored");
+    g.append("g")
+      .attr("class", "axis axis--y")
+      .call(d3.axisLeft(y).ticks(5))
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", "0.71em")
+      .attr("text-anchor", "end")
+      .text("goals Scored");
 
 
-  g.selectAll(".bar")
-    .data(data)
-    .enter().append("rect")
-    .attr("class", "bar")
-    .attr("x", function (d) {
-      return x(d.player);
-    })
-    .attr("y", function (d) {
-      return y(d.goals);
-    })
-    .attr("width", x.bandwidth())
-    .attr("height", function (d) {
-      return height - y(d.goals)
-    })
-    .on("mouseover", function (d) {
-      return tip.text(d.goals).style("visibility", "visible").style("top", y(d.goals) - 13 + 'px').style("left", x(d.player) + x.bandwidth() - 12 + 'px')
-    })
-    .on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
-    .on("mouseout", function () {
-      return tip.style("visibility", "hidden");
+    g.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function (d) {
+        return x(d.player);
+      })
+      .attr("y", function (d) {
+        return y(d.goals);
+      })
+      .attr("width", x.bandwidth())
+      .attr("height", function (d) {
+        return height - y(d.goals)
+      })
+      .on("mouseover", function (d) {
+        return tip.text(d.goals).style("visibility", "visible").style("top", y(d.goals) - 13 + 'px').style("left", x(d.player) + x.bandwidth() - 12 + 'px')
+      })
+      .on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
+      .on("mouseout", function () {
+        return tip.style("visibility", "hidden");
+      });
     });
+  $(document).on("click", ".clear", function (){
+    d3.selectAll("svg > *").remove();
+  })
+
 });

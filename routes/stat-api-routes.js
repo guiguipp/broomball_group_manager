@@ -13,15 +13,14 @@ module.exports = function(app) {
       res.json(dbStats[0]);
       });
     });
-/*
-    app.get("/api/rosters/game/:game_id/players", function(req, res) {
-      db.sequelize.query('SELECT DISTINCT shortname,Rosters.id, Rosters.captain1Pick, Rosters.captain2Pick, player_level AS level FROM Rosters INNER JOIN Players ON Rosters.player = Players.shortname WHERE GameId=? AND availability=true ORDER BY shortname ASC',
-      {replacements: [req.params.game_id], type: db.sequelize.QueryTypes.SELECT
-        }).then(function(dbRoster) {
-          res.json(dbRoster);
-          });
+  app.get("/api/stats/:game_id/goals", function(req, res) {
+    db.sequelize.query('SELECT player, sum(goals) AS goals FROM Rosters WHERE GameId=? AND goals > 0 GROUP BY player;',
+    {replacements: [req.params.game_id], type: db.sequelize.QueryTypes.SELECT
+      }).then(function(dbRoster) {
+        res.json(dbRoster);
         });
-*/
+      });
+
 
 
       /*
