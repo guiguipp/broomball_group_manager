@@ -1,15 +1,32 @@
 var path = require("path")
 var db = require("../models");
+var Sequelize = require("sequelize");
+const Op = Sequelize.Op;
+
 
 module.exports = function(app) {
-  app.get("/api/rosters", function(req, res) {
-    db.Rosters.findAll({}).then(function(dbRosters) {
-    console.log("dbRosters");
+  app.get("/api/stats/goals", function(req, res) {
+    db.sequelize.query('SELECT player, sum(goals) AS goals FROM Rosters WHERE goals > 0 GROUP BY player;')
+    .then(function(dbStats) {
+    // console.log(dbStats);
 
-      // res.json(dbStat);
+      res.json(dbStats[0]);
       });
     });
+/*
+    app.get("/api/rosters/game/:game_id/players", function(req, res) {
+      db.sequelize.query('SELECT DISTINCT shortname,Rosters.id, Rosters.captain1Pick, Rosters.captain2Pick, player_level AS level FROM Rosters INNER JOIN Players ON Rosters.player = Players.shortname WHERE GameId=? AND availability=true ORDER BY shortname ASC',
+      {replacements: [req.params.game_id], type: db.sequelize.QueryTypes.SELECT
+        }).then(function(dbRoster) {
+          res.json(dbRoster);
+          });
+        });
+*/
 
+
+      /*
+
+    // SELECT player, sum(goals) FROM Rosters WHERE goals > 0 GROUP BY player ORDER BY player ASC;
     app.get("/api/stats", function(req, res) {
       db.Stat.findAll({}).then(function(dbStat) {
       console.log(dbStat);
@@ -60,6 +77,6 @@ module.exports = function(app) {
       .then(function(dbStat) {
       res.json(dbStat);
       });
-    });
+    });*/
 
 };

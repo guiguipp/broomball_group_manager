@@ -1,6 +1,6 @@
 const currentURL = window.location.origin;
 
-d3.json(currentURL + "/api/rosters", function (data) {
+d3.json(currentURL + "/api/stats/goals", function (data) {
  console.log(data);
  
   var tip = d3.select(".chart-container")
@@ -10,14 +10,14 @@ d3.json(currentURL + "/api/rosters", function (data) {
     .style("z-index", "10")
     .style("visibility", "hidden");
 
-  var svg = d3.select("svg").attr("class", "background-style"),
+  var svg = d3.select("svg").attr("class", "background-style").attr("id","data_content"),
     margin = {
       top: 20,
       right: 20,
       bottom: 42,
       left: 40
     },
-    width = +svg.attr("width") - margin.left - margin.right,
+    width = (+svg.attr("width") - margin.left - margin.right) * 90/100,
     height = +svg.attr("height") - margin.top - margin.bottom;
 
   var x = d3.scaleBand().rangeRound([0, width]).padding(0.05),
@@ -32,7 +32,7 @@ d3.json(currentURL + "/api/rosters", function (data) {
     return d.player;
   }));
   y.domain([0, d3.max(data, function (d) {
-    return d.points;
+    return d.goals;
   })]);
 
   g.append("g")
@@ -48,13 +48,13 @@ d3.json(currentURL + "/api/rosters", function (data) {
 
   g.append("g")
     .attr("class", "axis axis--y")
-    .call(d3.axisLeft(y).ticks(10))
+    .call(d3.axisLeft(y).ticks(5))
     .append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 6)
     .attr("dy", "0.71em")
     .attr("text-anchor", "end")
-    .text("Points Scored");
+    .text("goals Scored");
 
 
   g.selectAll(".bar")
@@ -65,14 +65,14 @@ d3.json(currentURL + "/api/rosters", function (data) {
       return x(d.player);
     })
     .attr("y", function (d) {
-      return y(d.points);
+      return y(d.goals);
     })
     .attr("width", x.bandwidth())
     .attr("height", function (d) {
-      return height - y(d.points)
+      return height - y(d.goals)
     })
     .on("mouseover", function (d) {
-      return tip.text(d.points).style("visibility", "visible").style("top", y(d.points) - 13 + 'px').style("left", x(d.player) + x.bandwidth() - 12 + 'px')
+      return tip.text(d.goals).style("visibility", "visible").style("top", y(d.goals) - 13 + 'px').style("left", x(d.player) + x.bandwidth() - 12 + 'px')
     })
     .on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
     .on("mouseout", function () {
