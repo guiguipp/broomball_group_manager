@@ -24,7 +24,9 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: 0
             },
         win: {
-            type: DataTypes.BOOLEAN
+            type: DataTypes.ENUM,
+            values: ['yes','no','unknown'],
+            defaultValue: "unknown",
             },
         captain1Pick: {
             type: DataTypes.INTEGER,

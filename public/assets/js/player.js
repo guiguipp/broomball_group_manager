@@ -1,46 +1,43 @@
-
 $(document).ready(function() {
     const currentURL = window.location.origin;
 
     // Hide the players until necessary
-    $("#table_striped").hide()
-    $("#input_form").hide()
+    $("#table_striped").hide();
+    $("#input_form").hide();
     // toggle between modes
     $("#edit_player").click(function(){
-        $("#table_striped").show()
-        $("#input_form").hide()
+        $("#table_striped").show();
+        $("#input_form").hide();
+        showPlayerList();
     })
     $("#add_player").click(function(){
-        $("#input_form").show()
-        $("#table_striped").hide()
+        $("#input_form").show();
+        $("#table_striped").hide();
         // trigger the "add" mode for the submit button
-        $("#submit_button").attr("mode","add")
+        $("#submit_button").attr("mode","add");
         })
 
-    var playerList = $("tbody");
-    var playerContainer = $(".player-container");
-    var shortNameInput = $("#short_name");
-    var fullNameInput = $("#full_name");
-    var emailInput = $("#email_address");
+    let shortNameInput = $("#short_name");
+    let fullNameInput = $("#full_name");
+    let emailInput = $("#email_address");
 
     // Adding event listeners to the form to create a new object, and the button to delete a Player
     $(document).on("submit", "#player-form", handlePlayerFormSubmit);
     $(document).on("click", ".delete-player", handleDeleteButtonPress);
     $("#cancel_form").click(function(){
-        removeInfo()
-        $("#input_form").hide()
+        console.log("Clicked on cancel");
+        
+        removeInfo();
+        $("#input_form").hide();
         });
-
-    // Getting the initial list of Players
-    showPlayerList();
 
     // A function to handle what happens when the form is submitted to create a new Player
     function handlePlayerFormSubmit(event) {
         event.preventDefault();
         // Getting references to the name input and player container, as well as the table body
-        var playerLevelInput = $("#level_select");
-        var preferredPositionInput = $("#position_select");
-        var playerStatusInput = $("#player_status").val().trim().toLowerCase();
+        let playerLevelInput = $("#level_select");
+        let preferredPositionInput = $("#position_select");
+        let playerStatusInput = $("#player_status").val().trim().toLowerCase();
             console.log(playerStatusInput)
             if (playerStatusInput === "ten bucker") {playerStatusInput = "ten_bucker"}
 
@@ -80,42 +77,25 @@ $(document).ready(function() {
             } 
         }
 
+        // Removes all input from form
     function removeInfo() {
-        event.preventDefault();
-        console.log("Overwrite. Please wait...");
-        // Overwrite all input
+        if (event) {event.preventDefault()}
         $("#short_name").val("")
         $("#full_name").val("")
         $("#level_select").val("")
         $("#position_select").val("")
         $("#player_status").val("")
         $("#email_address").val("")
-    }
+        }
 
     // A function for creating a player. Calls getPlayers upon completion
-    function upsertPlayer(playerData) {
+    const upsertPlayer = (playerData) => {
         $.post("/api/players", playerData)
         .then(showPlayerList);
-    }
-    /*
-    // Function for creating a new list row for players
-    function createPlayerRow(playerData) {
-        var newTr = $(`<tr>`);
-        // console.log(playerData)
-        newTr.data("player", playerData);
-        newTr.append(`<td class="player_table"> ${playerData.shortname} </td>`);
-        // newTr.append("<td>" + playerData.full_name + "</td>");
-        // newTr.append("<td>" + playerData.player_level + "</td>");
-        // newTr.append("<td>" + playerData.preferred_position + "</td>");
-        // newTr.append("<td>" + playerData.player_status + "</td>");
-        // newTr.append("<td>" + playerData.email + "</td>");        
-        newTr.append(`<td class="player_table"> <a style='cursor:pointer;color:green' class="edit_player" player_id="${playerData.id}" short_name="${playerData.shortname}" full_name="${playerData.full_name}" level="${playerData.player_level}" position="${playerData.preferred_position}" status="${playerData.player_status}" email="${playerData.email}"> Edit </a> / <a style='cursor:pointer;color:red' class='delete-player' id_to_delete='${playerData.id}'>Delete</a> </td>>`);
-        return newTr;
-    }
-    */
-
+        }
+    
     // Function for retrieving players and getting them ready to be rendered to the page
-    function showPlayerList() {
+    const showPlayerList = () => {
         $.get("/api/players", function(dataFromAPI) {
             $("thead").empty()
             let tHeader = `<tr id="t_header"> <th>Players</th> <th>Manage</th></tr>`
@@ -128,31 +108,16 @@ $(document).ready(function() {
                 $("#player_table").append(fullRow)
                 })
             });
-    }
-    /*
-    // A function for rendering the list of players to the page
-    function renderPlayerList(rows) {
-        playerList.children().not(":last").remove();
-        playerContainer.children(".alert").remove();
-        if (rows.length) {
-            // console.log(rows);
-            playerList.prepend(rows);
-            }
-        else {
-            renderEmpty();
-            }
         }
-    */
 
     // Function for handling what happens when the delete button is pressed
-    function handleDeleteButtonPress() {
-        // var listItemData = $(this).parent("td").parent("tr").data("player");
+    function handleDeleteButtonPress(){
         var id = $(this).attr("id_to_delete");
         $.ajax({
         method: "DELETE",
         url: "/api/players/" + id
         }).then(showPlayerList);
-    }
+        }
 
     $(document).on("click", ".edit_player", function(){
         console.log("Click on .edit_player")
@@ -163,7 +128,7 @@ $(document).ready(function() {
         let playerPosition = $(this).attr("position");
         let playerStatus = $(this).attr("status");
         let playerEmail = $(this).attr("email");
-        // console.log(`playerId: ${playerId}, playerShortname: ${playerShortname}, playerFullName: ${playerFullName}, playerLevel: ${playerLevel}, playerPosition: ${playerPosition}, playerStatus: ${playerStatus}, playerEmail: ${playerEmail}`)
+
         if (playerPosition === "forward") {playerPosition = "Forward"}
         else if (playerPosition === "defense") {playerPosition = "Defense"}
         else if (playerPosition === "goalie") {playerPosition = "Goalie"}
@@ -194,14 +159,9 @@ $(document).ready(function() {
             email: player.email})
             }).then(function(){
                 console.log("Player Edited")
-                $("#short_name").val("")
-                $("#full_name").val("")
-                $("#level_select").val("")
-                $("#position_select").val("")
-                $("#player_status").val("")
-                $("#email_address").val("")
-                $("#input_form").hide()
+                removeInfo()
                 showPlayerList()
+                $("#input_form").hide();
                 })
             };
     }); 
