@@ -4,19 +4,18 @@ $(document).ready(function() {
 
     // Hide the players until necessary
     $("#table_striped").hide()
+    $("#input_form").hide()
+    // toggle between modes
     $("#edit_player").click(function(){
         $("#table_striped").show()
-        })
-    $("#input_form").hide()
+        $("#input_form").hide()
+    })
     $("#add_player").click(function(){
         $("#input_form").show()
-        })
-    $("#add_player").click(function (){
+        $("#table_striped").hide()
+        // trigger the "add" mode for the submit button
         $("#submit_button").attr("mode","add")
-    })
-    $("#edit_player").click(function (){
-        $("#submit_button").attr("mode","edit")
-    })
+        })
 
     var playerList = $("tbody");
     var playerContainer = $(".player-container");
@@ -98,7 +97,7 @@ $(document).ready(function() {
         $.post("/api/players", playerData)
         .then(showPlayerList);
     }
-    
+    /*
     // Function for creating a new list row for players
     function createPlayerRow(playerData) {
         var newTr = $(`<tr>`);
@@ -113,21 +112,21 @@ $(document).ready(function() {
         newTr.append(`<td class="player_table"> <a style='cursor:pointer;color:green' class="edit_player" player_id="${playerData.id}" short_name="${playerData.shortname}" full_name="${playerData.full_name}" level="${playerData.player_level}" position="${playerData.preferred_position}" status="${playerData.player_status}" email="${playerData.email}"> Edit </a> / <a style='cursor:pointer;color:red' class='delete-player' id_to_delete='${playerData.id}'>Delete</a> </td>>`);
         return newTr;
     }
+    */
 
-        // Function for retrieving players and getting them ready to be rendered to the page
+    // Function for retrieving players and getting them ready to be rendered to the page
     function showPlayerList() {
         $.get("/api/players", function(dataFromAPI) {
             $("thead").empty()
+            let tHeader = `<tr id="t_header"> <th>Players</th> <th>Manage</th></tr>`
+            $("#player_table").append(tHeader)
             dataFromAPI.forEach((e) => {
-                console.log(e)
                 let newTr = `<tr>`
                 let playerName = `<td class="player_table"> ${e.shortname} </td>`
                 let manageButtons = `<td class="player_table"> <a style='cursor:pointer;color:green' class="edit_player" player_id="${e.id}" short_name="${e.shortname}" full_name="${e.full_name}" level="${e.player_level}" position="${e.preferred_position}" status="${e.player_status}" email="${e.email}"> Edit </a> / <a style='cursor:pointer;color:red' class='delete-player' id_to_delete='${e.id}'>Delete</a> </td>`
                 let fullRow = `${newTr}${playerName}${manageButtons}`
-                $("thead").append(fullRow)
-            })
-            // renderPlayerList(rowsToAdd);
-            // shortNameInput.val("");
+                $("#player_table").append(fullRow)
+                })
             });
     }
     /*
@@ -156,7 +155,7 @@ $(document).ready(function() {
     }
 
     $(document).on("click", ".edit_player", function(){
-        console.log("Click recorded")
+        console.log("Click on .edit_player")
         let playerId = $(this).attr("player_id");
         let playerShortname = $(this).attr("short_name");
         let playerFullName = $(this).attr("full_name");
@@ -173,6 +172,7 @@ $(document).ready(function() {
         
         $("#input_form").show()
         $("#submit_button").attr("id_of_player",playerId)
+        $("#submit_button").attr("mode","edit")
         $("#short_name").val(playerShortname)
         $("#full_name").val(playerFullName)
         $("#level_select").val(playerLevel)
