@@ -267,6 +267,8 @@ $(document).ready(function() {
         let gameDate = $(this).attr("game_date");
         let locked = $(this).attr("locked");
         if (locked === "false") {
+            let team1Array = [];
+            let team2Array = [];
             $.ajax({ url: currentURL + "/api/rosters/game/"+ gameId +"/availability/1/player/asc", method: "GET" }).then(function(dataFromAPI) {
                 function PlayerObj (id) {
                     this.id = id,
@@ -400,13 +402,6 @@ $(document).ready(function() {
         let gameDate = $(this).attr("game_date");
         let locked = $(this).attr("locked");
         getCaptainPicks(gameId,playerId,gameId,2)
-        })
-
-    $("#reset").click(function() {
-        let team1Array = [];
-        let team2Array = [];
-        console.log("team1Array: ", team1Array)
-        console.log("team2Array: ", team2Array)
         })
 
     $("#serpentine_draft").click(function() {

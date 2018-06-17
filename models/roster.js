@@ -23,6 +23,9 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.INTEGER,
             defaultValue: 0
             },
+        win: {
+            type: DataTypes.BOOLEAN
+            },
         captain1Pick: {
             type: DataTypes.INTEGER,
             defaultValue: 0

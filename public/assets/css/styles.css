@@ -248,7 +248,7 @@ thead > th {
     font-weight: bold;
 }
 .player_table {
-    padding-left: 19%;
+    text-align: center;
 }  
 /* ---------------------------------D3 styling ----------------------------------------------- */
 
