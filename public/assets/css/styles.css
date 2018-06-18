@@ -31,8 +31,6 @@ h2 {
     font-size: 50px;
     color: white;
     position: relative;
-    bottom: 50px;
-    /* left: 120px; */
     text-shadow:
     -1px -1px 0 #000,
     1px -1px 0 #000,
@@ -155,7 +153,7 @@ a[aria-expanded="true"]::before {
 }
 #inner-main {
     background: #EA8D47;
-    padding: 100px;
+    padding: 10%;
     margin: 0
 }
 img {
@@ -168,6 +166,7 @@ img {
     position: relative;
     width: 150px;
     height: 50px;
+    margin-top: 5%;
     background-color: #FFFFFF;
     border-color: #000;
     text-shadow:
@@ -327,6 +326,5 @@ svg text{
     }
     .mobile-htwo{
         padding-top: 10%;
-        float: left;
     }
 }

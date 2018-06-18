@@ -25,13 +25,10 @@ $(document).ready(function() {
         let gameId = $(this).attr("game_id");
         let locked = $(this).attr("locked");
         console.log("checking for game: ",gameId)
-        // updateScoreDisplayed(gameId)
         $.when($.ajax(updateScoreDisplayed(gameId))).then(function(){
             showGameStats(gameId,locked)
             lockStats(gameId,locked)
             })
-        // lockStats(gameId,locked,updateScoreDisplayed)
-        // showGameStats(gameId,locked)
         })
     // sending the attr to the lock and unlock buttons 
     const lockStats = (idOfGame,lockStatus) => {
@@ -40,8 +37,8 @@ $(document).ready(function() {
         $("#lock_all_info_stats").attr("game_id",idOfGame)
         $("#lock_all_info_stats").attr("locked",lockStatus)
         }
-
-    function showGameStats(idOfGame,lockStatus,cb){
+    // function to show all the stats from the API data. Creates buttons to update if lock status is set to "false"
+    function showGameStats(idOfGame,lockStatus){
         $(".statscontent_hidden").show();
         $("#results_dark").text("");
         $("#results_white").text("");

@@ -114,15 +114,19 @@ https://material.io/tools/color/#!/?view.left=0&view.right=1&primary.color=FB8C0
 /* buttons size */
 .game_button {
     text-align: center;
-    width: 150px;
-    margin-top: 10px;
-    margin-left: 150px;
+    min-width: 150px;
+    margin-top: 5%
     }
 
 .player_button {   
     width: 55%;
     margin-top: 10px;
     min-width: 150px;
+}
+/* Setting up the div to not cut the button */
+.future_game {
+    min-width: 50px;
+    text-align: center;
 }
 
 /* other buttons */
