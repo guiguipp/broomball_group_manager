@@ -156,7 +156,6 @@ $(document).ready(function() {
                 });
             });
 
-
     // toggling computer and manual draft modes so that they don't keep appending
     $("#manual_draft").click(function(){
         $("#dark_draft_col").text("")
@@ -404,6 +403,18 @@ $(document).ready(function() {
         getCaptainPicks(gameId,playerId,gameId,2)
         })
 
+    // resets the pick of the player after a click
+    $(document).on("click", ".reset_pick", function (){
+        let playerId = $(this).attr("player_id");
+        let turn = $(this).attr("turn");
+        let gameId = $(this).attr("game_id")
+        let gameDate = $(this).attr("game_date")
+        $.ajax(resetPick(gameId,gameDate,playerId, turn,generatePlayerColumn,generateRanksColumn)).then(function() {
+            // the rendering of the picks is done as a call back
+            
+            })
+        });
+
     $("#serpentine_draft").click(function() {
         let gameId = $(this).attr("game_id");
         let gameDate = $(this).attr("game_date");
@@ -610,18 +621,18 @@ $(document).ready(function() {
             dataFromAPI.forEach((e,i) => {
                 if (turn == 1) {
                     if(e.captain1Pick < 1) {
-                        let divPick = `<div class="pick_check" id="${e.id}" availability="${e.availability}">`
+                        let divPick = `<div class="pick_check pick_dark" id="${e.id}" availability="${e.availability}">`
                         let playerButton = `<button class="btn btn-info navbar-btn player_button regular_grey" id="${e.id}" player="${e.player}">${e.player}</button>`
-                        let rightArrowButton = `<i class="fa fa-arrow-circle-o-right pick_dark pick_arrows arrows" id="${e.id}" player="${e.player}" game_date="${dateOfGame}" game_id="${e.GameId}"></i>`
+                        let rightArrowButton = `<i class="fa fa-arrow-circle-o-right pick_dark pick_arrows arrows" id="${e.id}" player="${e.player}" game_date="${dateOfGame}" game_id="${e.GameId}"></i></div>`
                         let defaultSet = `${divPick} ${playerButton}${rightArrowButton}`
                         $("#dark_draft_col").append(defaultSet)
                         }
                     }
                 else {        
                     if(e.captain2Pick < 1) {
-                        let divPick = `<div class="pick_check" id="${e.id}" availability="${e.availability}">`
+                        let divPick = `<div class="pick_check pick_white" id="${e.id}" availability="${e.availability}">`
                         let playerButton = `<button class="btn btn-info navbar-btn player_button regular_grey" id="${e.id}" player="${e.player}">${e.player}</button>`
-                        let rightArrowButton = `<i class="fa fa-arrow-circle-right pick_white pick_arrows arrows" id="${e.id}" player="${e.player}" game_date="${dateOfGame}" game_id="${e.GameId}"></i>`
+                        let rightArrowButton = `<i class="fa fa-arrow-circle-right pick_white pick_arrows arrows" id="${e.id}" player="${e.player}" game_date="${dateOfGame}" game_id="${e.GameId}"></i></div>`
                         let defaultSet = `${divPick} ${playerButton}${rightArrowButton}`
                         $("#dark_draft_col").append(defaultSet)
                         }
@@ -644,7 +655,6 @@ $(document).ready(function() {
         $("#dark_draft_col").empty()
         $("#white_draft_col").empty()
         // getting sorted picks for capt1 and capt2 in their respective turns
-        // $.ajax({ url: currentURL + "/api/rosters/4/players/captain1picks", method: "GET" }).then(function(dataFromAPI) {
         $.ajax({ url: currentURL + "/api/rosters/" + idOfGame + "/players/" + picks, method: "GET" }).then(function(dataFromAPI) {
             ultimateLength = dataFromAPI.length;
             // since non ranked players have a 0 value by default, they show before everyone in the sorted list, which we do not want 
@@ -719,19 +729,23 @@ $(document).ready(function() {
                 }
                 
             rankedArray.forEach((e,i) => {
-                let buttonInfo = `<button class="btn btn-info navbar-btn player_button empty_button"><span class="rank_num">${i+1}</span></button>`
+                // if the player has not been ranked (aka: rank is 0), the div is created without any name
+                let buttonInfo = `<button class="btn btn-info navbar-btn player_button empty_button"><span class="rank_num">${i+1}</span>. </button>`
+                let resetButton = `<i></i>`; 
                 if (turn == 1) {
-                if(e.captain1Pick > 0) {
-                    buttonInfo = `<span class="rank_num_picked">${i+1}</span>. <button class="btn btn-info navbar-btn player_button empty_button not_that_empty" id="${e.id}" player="${e.player}">${e.player}</button>`
+                    if(e.captain1Pick > 0) {
+                        buttonInfo = `<span class="rank_num_picked">${i+1}</span>. <button class="btn btn-info navbar-btn player_button empty_button not_that_empty" id="${e.id}" player="${e.player}">${e.player}</button>`
+                        resetButton = `<i class="fa fa-minus-circle reset_pick" player_id="${e.id}" current_rank="${i+1}" turn="${turn}" game_id="${idOfGame}" game_date="${dateOfGame}"></i>`
                     }
                     }
                 else {
                     if(e.captain2Pick > 0) {
                         buttonInfo = `<span class="rank_num_picked">${i+1}</span>. <button class="btn btn-info navbar-btn player_button empty_button not_that_empty" id="${e.id}" player="${e.player}">${e.player}</button>`
+                        resetButton = `<i class="fa fa-minus-circle reset_pick" player_id="${e.id}" current_rank="${i+1}" turn="${turn}" game_id="${idOfGame}" game_date="${dateOfGame}" ></i>`
                         }
                     }
                 let pickDiv = `<div class="pick_check">`
-                let divSet = `${pickDiv}${buttonInfo}`
+                let divSet = `${pickDiv}${buttonInfo}${resetButton}`
                 $("#white_draft_col").append(divSet)
                 
                 });
@@ -765,14 +779,17 @@ $(document).ready(function() {
         else {
             picks = "captain2picks"
         }
+        // get all the picks for the respective turn
         $.ajax({ url: currentURL + "/api/rosters/" + idOfGame + "/players/" + picks, method: "GET" }).then(function(dataFromAPI) {
             let lastRank 
+            // since API returns results by rank, the last player bears the current highest rank in the draft. 
+            // We get that number to assign the next rank to the next drafted player.
             if (turn == 1) {
                 lastRank = dataFromAPI[dataFromAPI.length-1].captain1Pick
                 }
             else {
                 lastRank = dataFromAPI[dataFromAPI.length-1].captain2Pick
-            }
+                }
             
             let nextRank = lastRank + 1;
             $.ajax({ url: currentURL + "/api/rosters/" + idOfPlayer + "/" + nextRank + "/" + picks, method: "PUT"}).then(function(dataFromAPI) {
@@ -783,26 +800,46 @@ $(document).ready(function() {
             })
         }
 
+        const resetPick = (idOfGame,dateOfGame,idOfPlayer, turn,cb1,cb2) => {
+            let picks;
+            if (turn == 1) {
+                picks = "captain1picks"
+            }
+            else {
+                picks = "captain2picks"
+            }
+            $.ajax({ url: currentURL + "/api/rosters/" + idOfPlayer + "/" + 0 + "/" + picks, method: "PUT"}).then(function(dataFromAPI) {
+                // we re-render our columns
+                cb1(idOfGame,dateOfGame,turn)
+                cb2(idOfGame,dateOfGame,turn)
+                })   
+            }
+        
+
 showTeams()
 seeUpcomingGames()
 
 // Function to check if the picks have been set by the captains
 // if so, creates a data attribute that will allow to launch the draft functions
 const testPicksReadiness = (data) => {
+    let rankingArray = []
     data.forEach((e) => {
-        if (e.captain1Pick != 0 && e.captain2Pick != 0) {
-            console.log("The picks are ready, set up the buttons and launch mapping function!")
-            $("#alternate_draft").attr("ready","yes")
-            $("#serpentine_draft").attr("ready","yes")
-        }
-        else {
+        rankingArray.push(e.captain1Pick,e.captain2Pick)
+        })
+        // if not all the player
+        if(rankingArray.indexOf(0) != -1) {
             console.log("The picks aren't ready yet")
             $("#alternate_draft").attr("ready","no")
             $("#serpentine_draft").attr("ready","no")
         }
-    })
-    pushPicksToArray(data)
-}
+        else {
+            console.log("The picks are ready, set up the buttons and launch mapping function!")
+            $("#alternate_draft").attr("ready","yes")
+            $("#serpentine_draft").attr("ready","yes")
+            pushPicksToArray(data)
+        }    
+    }
+
 const pushPicksToArray = (data) => {
     // sorting all players via their ranking from the respective captains
     let sortedDarkPicks = data.sort(function(a,b) {    

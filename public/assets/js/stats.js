@@ -26,8 +26,8 @@ $(document).ready(function() {
         let locked = $(this).attr("locked");
         console.log("checking for game: ",gameId)
         $.when($.ajax(updateScoreDisplayed(gameId))).then(function(){
-            showGameStats(gameId,locked)
             lockStats(gameId,locked)
+            showGameStats(gameId,locked)
             })
         })
     // sending the attr to the lock and unlock buttons 
@@ -95,10 +95,10 @@ $(document).ready(function() {
             for(i=0; i < dataFromAPI.length; i++){
                 let d = dataFromAPI[i];
                 
-                let plusGoalButton = `<i class="fa fa-plus-circle stat_button add_goal" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.goals}"></i>`
-                let plusAssistButton = `<i class="fa fa-plus-circle stat_button add_assist" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.assists}" ></i>`
-                let minusGoalButton = `<i class="fa fa-minus-circle stat_button substract_goal" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.goals}"></i>`
-                let minusAssistButton = `<i class="fa fa-minus-circle stat_button substract_assist" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.assists}"></i>`
+                let plusGoalButton = `<i class="fa fa-plus-circle goal_stat_button add_goal" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.goals}"></i>`
+                let plusAssistButton = `<i class="fa fa-plus-circle assist_stat_button add_assist" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.assists}" ></i>`
+                let minusGoalButton = `<i class="fa fa-minus-circle goal_stat_button substract_goal" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.goals}"></i>`
+                let minusAssistButton = `<i class="fa fa-minus-circle assist_stat_button substract_assist" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.assists}"></i>`
                 
                 if (lockStatus === true) {
                     plusGoalButton = "";
@@ -245,8 +245,8 @@ $(document).ready(function() {
             data: jQuery.param({lock_info: locked}), 
             method: "PUT" }).then(function(dataFromAPI) {
                 $.when($.ajax(updateScoreDisplayed(gameId))).then(function(){
-                    showGameStats(gameId,locked)
                     lockStats(gameId,locked)
+                    showGameStats(gameId,locked)
                 })
                 // showGameStats(gameId,locked)//,updateScoreDisplayed)
                 // showGameStats(gameId,locked)
@@ -262,8 +262,8 @@ $(document).ready(function() {
             data: jQuery.param({lock_info: locked}), 
             method: "PUT" }).then(function(dataFromAPI) {
                 $.when($.ajax(updateScoreDisplayed(gameId))).then(function(){
-                    showGameStats(gameId,locked)
                     lockStats(gameId,locked)
+                    showGameStats(gameId,locked)
                 })
             })
         })
