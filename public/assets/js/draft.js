@@ -257,6 +257,9 @@ $(document).ready(function() {
                     getAvailablePlayers(gameId,gameDate,locked)
                     });
                 });
+            }
+        else {
+            let notify = $.notify({title: "The game has been locked", message:"You cannot draft teams for a locked game"})
             } 
         });
 
@@ -284,7 +287,10 @@ $(document).ready(function() {
                     getAvailablePlayers(gameId,gameDate,locked)
                 })
             }
-        })
+        else {
+            let notify = $.notify({title: "The game has been locked.", message:"You cannot reset a locked game"});
+            }
+        });
     // show unavailable players
     $("#unavailable").click(function() {
         let gameId = $(this).attr("game_id");
@@ -305,6 +311,10 @@ $(document).ready(function() {
         let gameId = $(this).attr("game_id");
         let gameDate = $(this).attr("game_date");
         let locked = $(this).attr("locked");
+        if (locked === "true") {
+            let notify = $.notify({title: "The game has been locked.", message:"You cannot change the availabilities for a locked game"})
+            }
+        else {
         $.ajax({ 
             url: currentURL + "/api/rosters/" + playerId, 
             method: "PUT",
@@ -312,13 +322,19 @@ $(document).ready(function() {
             }).then(function(dataFromAPI) {
                 getAvailablePlayers(gameId,gameDate,locked)   
                 });
-            });
+            };
+        });
     // add non-members to the list of draftable players
     $("#ten_buckers").click(function() {
-        $("#available_draft_col").empty()
         let gameId = $(this).attr("game_id");
         let gameDate = $(this).attr("game_date");
+        let locked = $(this).attr("locked")
+        if (locked === "true") {
+            let notify = $.notify({title: "The game has been locked", message:"You cannot add ten buckers to a locked game"})
+        }
+        else {
         console.log("Click recorded\ngameId: ",gameId,"\ngameDate: ",gameDate)
+        $("#available_draft_col").empty()
         $.ajax({ url: currentURL + "/api/players/ten_bucker", method: "GET" })
         .then(function(dataFromAPI) {
             dataFromAPI.forEach((e) => {
@@ -328,7 +344,8 @@ $(document).ready(function() {
                 $("#available_draft_col").append(availablePlayerDiv)
                 });
             })
-        })
+        }
+        });
 
     // clicking on a ten bucker adds them to the list of available players
     $(document).on("click",".not_a_member", function (){
@@ -361,6 +378,13 @@ $(document).ready(function() {
         let gameId = $(this).attr("game_id");
         let gameDate = $(this).attr("game_date")
         let locked = $(this).attr("locked");
+        if (locked === "true") {
+            let notify = $.notify({title: "The game has been locked.", message:"You cannot set the picks of a locked game"})
+            }
+        else {
+            generatePlayerColumn(gameId,gameDate,1)
+            generateRanksColumn(gameId,gameDate,1)
+            }
         // will need to curry this
         /*
         $.when($.ajax(generatePlayerColumn(gameId,gameDate,1))).then(function() {
@@ -368,8 +392,6 @@ $(document).ready(function() {
             generateRanksColumn(gameId,gameDate,1)
             });
         */
-        generatePlayerColumn(gameId,gameDate,1)
-        generateRanksColumn(gameId,gameDate,1)
         // ranksAfterColumn(generatePlayerColumn(gameId,gameDate,2))(generateRanksColumn(gameId,gameDate,1))
         });
     // clicking on "Set White Picks" should trigger the pick setting page
@@ -380,26 +402,25 @@ $(document).ready(function() {
         let gameId = $(this).attr("game_id");
         let gameDate = $(this).attr("game_date")
         let locked = $(this).attr("locked");
-        generatePlayerColumn(gameId,gameDate,2)
-        generateRanksColumn(gameId,gameDate,2)
+        if (locked === "true") {
+            let notify = $.notify({title: "The game has been locked.", message:"You cannot set the picks of a locked game"})
+            }
+        else {
+            generatePlayerColumn(gameId,gameDate,2)
+            generateRanksColumn(gameId,gameDate,2)
+            }
         });
 
     // getting attributes when clicking on the pick arrow of respective teams
     $(document).on("click", ".pick_dark", function (){
         let playerId = $(this).attr("id");
-        let playerName = $(this).attr("player");
         let gameId = $(this).attr("game_id");
-        let gameDate = $(this).attr("game_date");
-        let locked = $(this).attr("locked");
         getCaptainPicks(gameId,playerId,gameId,1)
         })
 
     $(document).on("click", ".pick_white", function (){
         let playerId = $(this).attr("id");
-        let playerName = $(this).attr("player");
         let gameId = $(this).attr("game_id");
-        let gameDate = $(this).attr("game_date");
-        let locked = $(this).attr("locked");
         getCaptainPicks(gameId,playerId,gameId,2)
         })
 
