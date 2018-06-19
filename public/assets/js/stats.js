@@ -95,10 +95,10 @@ $(document).ready(function() {
             for(i=0; i < dataFromAPI.length; i++){
                 let d = dataFromAPI[i];
                 
-                let plusGoalButton = `<i class="fa fa-plus-circle goal_stat_button add_goal" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.goals}"></i>`
-                let plusAssistButton = `<i class="fa fa-plus-circle assist_stat_button add_assist" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.assists}" ></i>`
-                let minusGoalButton = `<i class="fa fa-minus-circle goal_stat_button substract_goal" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.goals}"></i>`
-                let minusAssistButton = `<i class="fa fa-minus-circle assist_stat_button substract_assist" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.assists}"></i>`
+                let plusGoalButton = `<i class="fa fa-plus-circle goal stat_button add_goal" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.goals}"></i>`
+                let plusAssistButton = `<i class="fa fa-plus-circle assist stat_button add_assist" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.assists}" ></i>`
+                let minusGoalButton = `<i class="fa fa-minus-circle goal stat_button substract_goal" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.goals}"></i>`
+                let minusAssistButton = `<i class="fa fa-minus-circle assist stat_button substract_assist" locked="${lockStatus}" player_id="${d.id}" player="${d.player}" game_id="${idOfGame}" team="${d.team}" current_tot="${d.assists}"></i>`
                 
                 if (lockStatus === true) {
                     plusGoalButton = "";
@@ -146,6 +146,7 @@ $(document).ready(function() {
 
         $(document).on("click",".stat_button",function(){
             let lockStatus = $(this).attr("locked");
+            console.log("Click Recorded")
             if (lockStatus === "true") {
                 lockStatus = true;
                 }
@@ -160,36 +161,39 @@ $(document).ready(function() {
                 let playerTeam = $(this).attr("team");
                 let buttonClass = $(this).attr("class");
                 let currentValue = parseInt($(this).attr("current_tot"))
-                
-                buttonClass = buttonClass.replace("fa fa-minus-circle stat_button","").replace("fa fa-plus-circle stat_button","");
+                // there should be an easier way to do this
+                buttonClass = buttonClass
+                    .replace("fa fa-minus-circle goal stat_button ","")
+                    .replace("fa fa-plus-circle goal stat_button ","")
+                    .replace("fa fa-minus-circle assist stat_button ","")
+                    .replace("fa fa-plus-circle goal stat_button ","");
                 let newValue;
-                
+                console.log("Value of buttonClass we are checking against: ", buttonClass)
                 switch(buttonClass) {
-                    case buttonClass = " add_goal":
+                    case buttonClass = "add_goal":
                         console.log("Case add_goal")
                         newValue = currentValue + 1;
                         // need to updateScore
                             updateGoal(playerId,newValue,showGameStats,gameId,lockStatus,updateScoreDisplayed)
                         break;
                         
-                    case buttonClass = " add_assist":
+                    case buttonClass = "add_assist":
                         console.log("Case add_assist")
                         newValue = currentValue + 1;
                         // updateScoreDisplayed(gameId)
                         updateAssist(playerId,playerName,newValue,showGameStats,gameId,lockStatus,updateScoreDisplayed);
                         break;
 
-                    case buttonClass = " substract_goal":    
+                    case buttonClass = "substract_goal":    
                         console.log("Case substract_goal")
                         newValue = currentValue - 1;
                         if(newValue >= 0) {
                             // need to updateScore
                             updateGoal(playerId,newValue,showGameStats,gameId,lockStatus,updateScoreDisplayed)
-                        
                             }
                         break;
 
-                    case buttonClass = " substract_assist":
+                    case buttonClass = "substract_assist":
                         console.log("Case substract_assist")
                         newValue = currentValue - 1;
                         if(newValue >= 0) {

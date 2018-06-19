@@ -13,23 +13,23 @@ p {
     text-align: center;
 }
 
-.goal_stat_button {
+.goal {
     margin: 0,5px,0,5px;
     font-size: 150%;
     color: #EA8D47;
 }
 
-.goal_stat_button:hover {
+.stat_button:hover {
     color: #DE733A;
 } 
 
-.assist_stat_button {
+.assist {
     margin: 0,5px,0,5px;
     font-size: 150%;
     color: #ffbe75;
 }
 
-.assist_stat_button:hover {
+.stat_button:hover {
     color: #ea8d47;
 }
 
