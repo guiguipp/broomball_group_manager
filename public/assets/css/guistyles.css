@@ -1,3 +1,10 @@
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    padding-left: 12%;
+    font-family: boogaloo;
+    font-size: 150%;
+}
 .table_data {
     width: 25%;
 }
@@ -63,6 +70,15 @@ tr {
     padding-bottom: 50px;
     overflow-x: unset;
     overflow-y: scroll;
+}
+.no_game {
+    border-style: solid;
+    padding: 4% 2% 2% 2%;
+    text-align: center;
+    border-width: 1px;
+    border-color: #ffbe75;
+    opacity: 0.7;
+    color: #ffbe75;
 }
 
 #bottom_lock_feature {

@@ -266,8 +266,8 @@ $(document).ready(function() {
         let gameDate = $(this).attr("game_date");
         let locked = $(this).attr("locked");
         if (locked === "false") {
-            let team1Array = [];
-            let team2Array = [];
+            team1Array = [];
+            team2Array = [];
             $.ajax({ url: currentURL + "/api/rosters/game/"+ gameId +"/availability/1/player/asc", method: "GET" }).then(function(dataFromAPI) {
                 function PlayerObj (id) {
                     this.id = id,
@@ -437,11 +437,11 @@ $(document).ready(function() {
                     })
                 }
             else {
-                console.log("Display error message: game locked")
+                let notify = $.notify('The game is locked')
                 }
             }
         else {
-            console.log("Display error message")
+            let notify = $.notify('The picks have not been set yet')
             }
         });
 
@@ -469,11 +469,11 @@ $(document).ready(function() {
                     })
                 }
             else {
-                console.log("Display error message: game locked")
+                let notify = $.notify('The game is locked')
                 }
             }
         else {
-            console.log("Display error message")
+            let notify = $.notify('The picks have not been set yet')
             }
         });
     
@@ -508,16 +508,22 @@ $(document).ready(function() {
                 })
             }
     // shows the list of future games
-    function seeUpcomingGames() {
+    const seeUpcomingGames = () => {
         // emptying the div so that it does not keep appending when the data is refreshed
         $("#game_list").text("");
         $.ajax({ url: currentURL + "/api/games/upcoming", method: "GET" }).then(function(dataFromAPI) {
-            dataFromAPI.forEach((e) => {
-                let gameButton = `<div id=${e.id} class="future_game" locked="${e.lock_info}" game_date="${e.game_date}"> <button class="btn btn-info navbar-btn regular_grey game_button">${e.game_date}</button>\n`
-                let removeButton = `<i class="fa fa-times-circle remove remove_game" id="${e.id}" game_date="${e.game_date}"></i>`
-                let gameDiv = `${gameButton} ${removeButton}`
-                $("#game_list").append(gameDiv);
-                });
+            if (dataFromAPI.length > 0) {
+                dataFromAPI.forEach((e) => {
+                    let gameButton = `<div id=${e.id} class="future_game" locked="${e.lock_info}" game_date="${e.game_date}"> <button class="btn btn-info navbar-btn regular_grey game_button">${e.game_date}</button>\n`
+                    let removeButton = `<i class="fa fa-times-circle remove remove_game" id="${e.id}" game_date="${e.game_date}"></i>`
+                    let gameDiv = `${gameButton} ${removeButton}`
+                    $("#game_list").append(gameDiv);
+                    });
+                }
+            else {
+                let noGameMsg = `<div class="no_game"><p>No game to display for the date selected.<br>Create a game to start drafting teams!</p></div>`
+                $("#game_list").append(noGameMsg);
+                }
             })
         }
     // shows the list of past games
@@ -621,7 +627,7 @@ $(document).ready(function() {
             dataFromAPI.forEach((e,i) => {
                 if (turn == 1) {
                     if(e.captain1Pick < 1) {
-                        let divPick = `<div class="pick_check pick_dark" id="${e.id}" availability="${e.availability}">`
+                        let divPick = `<div class="pick_check pick_dark" id="${e.id}" availability="${e.availability}" game_id="${e.GameId}">`
                         let playerButton = `<button class="btn btn-info navbar-btn player_button regular_grey" id="${e.id}" player="${e.player}">${e.player}</button>`
                         let rightArrowButton = `<i class="fa fa-arrow-circle-o-right pick_dark pick_arrows arrows" id="${e.id}" player="${e.player}" game_date="${dateOfGame}" game_id="${e.GameId}"></i></div>`
                         let defaultSet = `${divPick} ${playerButton}${rightArrowButton}`
@@ -630,7 +636,7 @@ $(document).ready(function() {
                     }
                 else {        
                     if(e.captain2Pick < 1) {
-                        let divPick = `<div class="pick_check pick_white" id="${e.id}" availability="${e.availability}">`
+                        let divPick = `<div class="pick_check pick_white" id="${e.id}" availability="${e.availability}" game_id="${e.GameId}">`
                         let playerButton = `<button class="btn btn-info navbar-btn player_button regular_grey" id="${e.id}" player="${e.player}">${e.player}</button>`
                         let rightArrowButton = `<i class="fa fa-arrow-circle-right pick_white pick_arrows arrows" id="${e.id}" player="${e.player}" game_date="${dateOfGame}" game_id="${e.GameId}"></i></div>`
                         let defaultSet = `${divPick} ${playerButton}${rightArrowButton}`
